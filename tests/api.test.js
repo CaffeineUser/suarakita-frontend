@@ -154,12 +154,45 @@ describe('API client', () => {
     vi.resetModules();
   });
 
+  it('removes trailing slashes from the configured API base URL', async () => {
+    vi.stubEnv('VITE_API_BASE_URL', 'https://api.example.test/v2///');
+    vi.resetModules();
+
+    const configuredClient = await import('../src/api/client.js');
+    expect(configuredClient.API_BASE_URL).toBe('https://api.example.test/v2');
+    expect(configuredClient.getReportPhotoUrl(3)).toBe(
+      'https://api.example.test/v2/reports/3/photo',
+    );
+
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
   it('falls back to the local API URL when the environment value is empty', async () => {
     vi.stubEnv('VITE_API_BASE_URL', '');
     vi.resetModules();
 
     const fallbackClient = await import('../src/api/client.js');
     expect(fallbackClient.API_BASE_URL).toBe('http://localhost:3000/api/v1');
+
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
+  it('requires an API URL in production instead of silently using localhost', async () => {
+    vi.stubEnv('VITE_API_BASE_URL', '');
+    vi.stubEnv('DEV', false);
+    vi.stubEnv('PROD', true);
+    vi.resetModules();
+
+    const productionClient = await import('../src/api/client.js');
+    expect(productionClient.API_BASE_URL).toBe('');
+    await expect(productionClient.apiRequest('/reports')).rejects.toThrow(
+      'URL backend belum dikonfigurasi. Atur VITE_API_BASE_URL ke URL API backend.',
+    );
+    expect(() => productionClient.getReportPhotoUrl(3)).toThrow(
+      'URL backend belum dikonfigurasi. Atur VITE_API_BASE_URL ke URL API backend.',
+    );
 
     vi.unstubAllEnvs();
     vi.resetModules();
