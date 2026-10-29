@@ -38,7 +38,7 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: /Masuk/ })).toHaveAttribute('href', '/login');
     expect(screen.getByRole('link', { name: /Daftar Warga/ })).toHaveAttribute('href', '/register');
     expect(screen.getAllByRole('link', { name: /Buat Laporan/ })).toHaveLength(1);
-    const toggle = screen.getByRole('button', { name: 'Menu navigasi' });
+    const toggle = screen.getByTestId('mobile-menu-toggle');
     expect(toggle).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(toggle);
     expect(toggle).toHaveAttribute('aria-expanded', 'true');
@@ -80,14 +80,14 @@ describe('Header', () => {
       isAuthenticated: true, isAdmin: true, isWarga: false, isLoading: false, logout,
     };
     renderAt(<Header />);
-    fireEvent.click(screen.getByRole('button', { name: 'Menu navigasi' }));
+    fireEvent.click(screen.getByTestId('mobile-menu-toggle'));
     expect(screen.getByRole('link', { name: 'Dashboard Administrator' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('link', { name: 'Dashboard Administrator' }));
     expect(screen.getByTestId('path')).toHaveTextContent('/dashboard');
 
     cleanup();
     renderAt(<Header />);
-    fireEvent.click(screen.getByRole('button', { name: 'Menu navigasi' }));
+    fireEvent.click(screen.getByTestId('mobile-menu-toggle'));
     fireEvent.click(screen.getByRole('button', { name: 'Keluar Akun' }));
     await waitFor(() => expect(screen.getByTestId('path')).toHaveTextContent('/'));
     expect(logout).toHaveBeenCalledOnce();
@@ -104,7 +104,7 @@ describe('Header', () => {
       </MemoryRouter>,
     );
     expect(screen.getByRole('link', { name: /Dashboard Admin/ })).toHaveClass('active');
-    fireEvent.click(screen.getByRole('button', { name: 'Menu navigasi' }));
+    fireEvent.click(screen.getByTestId('mobile-menu-toggle'));
     expect(screen.getByRole('link', { name: 'Dashboard Administrator' })).toHaveClass('active');
     unmount();
 
@@ -115,7 +115,7 @@ describe('Header', () => {
       </MemoryRouter>,
     );
     expect(screen.getByRole('link', { name: /Buat Laporan$/ })).toHaveClass('active');
-    fireEvent.click(screen.getByRole('button', { name: 'Menu navigasi' }));
+    fireEvent.click(screen.getByTestId('mobile-menu-toggle'));
     expect(screen.getByRole('link', { name: 'Buat Laporan Lingkungan' })).toHaveClass('active');
 
     cleanup();
@@ -124,7 +124,7 @@ describe('Header', () => {
       isAuthenticated: true, isAdmin: false, isWarga: true, isLoading: false, logout: vi.fn(),
     };
     render(<MemoryRouter><Header /></MemoryRouter>);
-    fireEvent.click(screen.getByRole('button', { name: 'Menu navigasi' }));
+    fireEvent.click(screen.getByTestId('mobile-menu-toggle'));
     expect(screen.getByText('Peran: Warga')).toBeInTheDocument();
   });
 });

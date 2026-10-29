@@ -3,9 +3,13 @@
   "buildCommand": "bun run build",
   "outputDirectory": "dist",
   "env": {
-    "VITE_API_BASE_URL": "https://suarakita-backend.vercel.app/api/v1"
+    "VITE_API_BASE_URL": "/api/v1"
   },
   "rewrites": [
+    {
+      "source": "/api/v1/(.*)",
+      "destination": "https://suarakita-backend.vercel.app/api/v1/$1"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

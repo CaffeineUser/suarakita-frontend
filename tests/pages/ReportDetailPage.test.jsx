@@ -66,7 +66,7 @@ describe('ReportDetailPage', () => {
     expect(screen.getByText('Sudah dicek')).toBeInTheDocument();
     expect(screen.getAllByText('Sistem / Pelapor')).toHaveLength(2);
     expect(getReportPhotoUrl).toHaveBeenCalledWith(8);
-    fireEvent.click(screen.getByRole('button', { name: '×' }));
+    fireEvent.click(screen.getByTestId('report-success-dismiss'));
     expect(screen.queryByText('Laporan berhasil disimpan.')).not.toBeInTheDocument();
   });
 

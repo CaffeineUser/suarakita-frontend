@@ -167,9 +167,9 @@ export function CreateReportPage() {
   }
 
   return (
-    <div className="form-page-container">
+    <div className="form-page-container" data-testid="create-report-page">
       <div className="form-header-bar">
-        <button type="button" className="btn-back-link" onClick={() => navigate(-1)}>
+        <button type="button" className="btn-back-link" onClick={() => navigate(-1)} data-testid="create-report-back">
           <ArrowLeft size={18} /> Kembali
         </button>
         <h1 className="form-page-title">Buat Laporan Lingkungan Baru</h1>
@@ -189,7 +189,7 @@ export function CreateReportPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="report-create-form" noValidate>
+        <form onSubmit={handleSubmit} className="report-create-form" noValidate data-testid="create-report-form">
           {/* Judul Laporan */}
           <div className="form-group">
             <label htmlFor="report-title" className="form-label">
@@ -197,6 +197,7 @@ export function CreateReportPage() {
             </label>
             <input
               id="report-title"
+              name="title"
               type="text"
               required
               minLength={5}
@@ -205,6 +206,7 @@ export function CreateReportPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="form-input"
+              data-testid="report-title-input"
             />
             <div className="textarea-footer-info" style={{ marginTop: '0.25rem' }}>
               <span>Minimal 5 karakter. Judul singkat dan spesifik.</span>
@@ -222,10 +224,12 @@ export function CreateReportPage() {
               </label>
               <select
                 id="report-category"
+                name="category_id"
                 required
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
                 className="form-select"
+                data-testid="report-category-select"
               >
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
@@ -241,10 +245,12 @@ export function CreateReportPage() {
               </label>
               <select
                 id="report-urgency"
+                name="urgency"
                 required
                 value={urgency}
                 onChange={(e) => setUrgency(e.target.value)}
                 className="form-select"
+                data-testid="report-urgency-select"
               >
                 <option value="rendah">Rendah (Dampak minim/estetika)</option>
                 <option value="sedang">Sedang (Perlu penanganan standar)</option>
@@ -261,6 +267,7 @@ export function CreateReportPage() {
             </label>
             <textarea
               id="report-desc"
+              name="description"
               required
               minLength={10}
               maxLength={5000}
@@ -269,6 +276,7 @@ export function CreateReportPage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="form-textarea"
+              data-testid="report-description-input"
             />
             <div className="textarea-footer-info">
               <span style={{ color: description.trim().length < 10 ? '#ef4444' : 'var(--neutral-500)' }}>
@@ -289,6 +297,7 @@ export function CreateReportPage() {
               <MapPin size={18} className="field-icon" />
               <input
                 id="report-location"
+                name="location_name"
                 type="text"
                 required
                 minLength={3}
@@ -297,6 +306,7 @@ export function CreateReportPage() {
                 value={locationName}
                 onChange={(e) => setLocationName(e.target.value)}
                 className="form-input"
+                data-testid="report-location-input"
               />
             </div>
             <span className="input-help-text">Alamat jelas atau patokan yang mudah dikenali petugas.</span>
@@ -316,12 +326,14 @@ export function CreateReportPage() {
                 </label>
                 <input
                   id="report-lat"
+                  name="latitude"
                   type="number"
                   step="any"
                   placeholder="Contoh: -6.2088"
                   value={latitude}
                   onChange={(e) => setLatitude(e.target.value)}
                   className="form-input"
+                  data-testid="report-latitude-input"
                 />
               </div>
               <div className="form-group">
@@ -330,12 +342,14 @@ export function CreateReportPage() {
                 </label>
                 <input
                   id="report-lng"
+                  name="longitude"
                   type="number"
                   step="any"
                   placeholder="Contoh: 106.8456"
                   value={longitude}
                   onChange={(e) => setLongitude(e.target.value)}
                   className="form-input"
+                  data-testid="report-longitude-input"
                 />
               </div>
             </div>
@@ -343,7 +357,7 @@ export function CreateReportPage() {
 
           {/* Upload Foto Bukti */}
           <div className="form-group">
-            <label className="form-label">
+            <label htmlFor="photo-upload-input" className="form-label">
               Foto Bukti Kerusakan / Masalah <span className="required">*</span>
             </label>
 
@@ -360,13 +374,16 @@ export function CreateReportPage() {
                   id="photo-upload-input"
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
+                  aria-label="Foto bukti laporan"
+                  required
                   onChange={handlePhotoSelect}
                   className="file-input-hidden"
+                  data-testid="report-photo-input"
                 />
               </label>
             ) : (
               <div className="photo-preview-box">
-                <img src={photoPreview} alt="Preview Foto Laporan" className="preview-image" />
+                <img src={photoPreview} alt="Pratinjau foto laporan yang dipilih" className="preview-image" width="800" height="600" />
                 <div className="preview-actions">
                   <span className="preview-filename">{photoFile?.name}</span>
                   <button
@@ -374,6 +391,7 @@ export function CreateReportPage() {
                     className="btn btn-sm btn-danger"
                     onClick={handleRemovePhoto}
                     title="Ganti foto"
+                    data-testid="report-photo-remove"
                   >
                     <X size={16} /> Hapus & Ganti
                   </button>
@@ -397,6 +415,7 @@ export function CreateReportPage() {
               className="btn btn-outline"
               onClick={() => navigate(-1)}
               disabled={isSubmitting}
+              data-testid="create-report-cancel"
             >
               Batalkan
             </button>
@@ -405,6 +424,7 @@ export function CreateReportPage() {
               className="btn btn-primary btn-submit-report"
               disabled={isSubmitting}
               style={{ minWidth: '160px' }}
+              data-testid="create-report-submit"
             >
               {isSubmitting ? (
                 <>

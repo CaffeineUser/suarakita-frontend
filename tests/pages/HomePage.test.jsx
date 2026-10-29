@@ -62,7 +62,7 @@ describe('HomePage', () => {
     renderPage();
     expect(screen.getByText('Memuat daftar laporan lingkungan...')).toBeInTheDocument();
     expect(await screen.findByRole('heading', { name: 'Jalan amblas' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Jalan Rusak' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Jalan Rusak' })).toBeInTheDocument();
     expect(screen.getByText('1/3')).toBeInTheDocument();
     fireEvent.click(screen.getAllByRole('button', { name: 'support test' })[0]);
     expect(await screen.findByText('8 votes')).toBeInTheDocument();
@@ -111,10 +111,10 @@ describe('HomePage', () => {
     expect(screen.getByTestId('search')).not.toHaveTextContent('q=');
     await user.selectOptions(screen.getByLabelText(/Urgensi/), 'rendah');
     expect(screen.getByTestId('search')).toHaveTextContent('page=1');
-    await user.click(screen.getByRole('tab', { name: 'Semua Kategori' }));
+    await user.click(screen.getByRole('button', { name: 'Semua Kategori' }));
     expect(screen.getByTestId('search')).not.toHaveTextContent('category_id');
     expect(document.getElementById('filter-sort')).toHaveValue('priority_score_desc');
-    await user.click(screen.getByRole('tab', { name: 'Jalan Rusak' }));
+    await user.click(screen.getByRole('button', { name: 'Jalan Rusak' }));
     expect(screen.getByTestId('search')).toHaveTextContent('category_id=1');
   });
 

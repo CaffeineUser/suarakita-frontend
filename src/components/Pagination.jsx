@@ -44,7 +44,7 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }) {
   }
 
   return (
-    <nav className="pagination-nav" aria-label="Navigasi Halaman">
+    <nav className="pagination-nav" aria-label="Navigasi Halaman" data-testid="report-pagination">
       {total > 0 && (
         <p className="pagination-info">
           Menampilkan <strong>{startItem}</strong> - <strong>{endItem}</strong> dari{' '}
@@ -59,8 +59,9 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }) {
           disabled={page <= 1}
           onClick={() => onPageChange(page - 1)}
           aria-label="Halaman Sebelumnya"
+          data-testid="pagination-previous"
         >
-          <ChevronLeft size={16} /> Sebelumnya
+          <ChevronLeft size={16} aria-hidden="true" /> Sebelumnya
         </button>
 
         <div className="page-numbers">
@@ -80,6 +81,7 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }) {
                 className={`btn-page-number ${isActive ? 'active' : ''}`}
                 onClick={() => onPageChange(item)}
                 aria-current={isActive ? 'page' : undefined}
+                data-testid={`pagination-page-${item}`}
               >
                 {item}
               </button>
@@ -93,8 +95,9 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }) {
           disabled={page >= totalPages}
           onClick={() => onPageChange(page + 1)}
           aria-label="Halaman Berikutnya"
+          data-testid="pagination-next"
         >
-          Berikutnya <ChevronRight size={16} />
+          Berikutnya <ChevronRight size={16} aria-hidden="true" />
         </button>
       </div>
     </nav>

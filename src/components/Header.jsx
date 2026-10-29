@@ -28,10 +28,10 @@ export function Header() {
   }
 
   return (
-    <header className="site-header-wrapper">
+    <header className="site-header-wrapper" data-testid="site-header">
       <div className="site-header-container">
-        <Link to="/" className="brand-logo" onClick={closeMenu}>
-          <div className="brand-icon-badge">
+        <Link to="/" className="brand-logo" onClick={closeMenu} data-testid="brand-home-link">
+          <div className="brand-icon-badge" aria-hidden="true">
             <span className="brand-symbol">🌱</span>
           </div>
           <div className="brand-text-block">
@@ -42,16 +42,17 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="desktop-nav" aria-label="Navigasi Utama">
-          <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>
-            <Home size={16} /> Beranda
+          <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end data-testid="nav-home">
+            <Home size={16} aria-hidden="true" /> Beranda
           </NavLink>
 
           {(!isAuthenticated || isWarga) && (
             <NavLink
               to="/reports/new"
               className={({ isActive }) => `nav-link btn-nav-create ${isActive ? 'active' : ''}`}
+              data-testid="nav-create-report"
             >
-              <PlusCircle size={16} /> Buat Laporan
+              <PlusCircle size={16} aria-hidden="true" /> Buat Laporan
             </NavLink>
           )}
 
@@ -59,8 +60,9 @@ export function Header() {
             <NavLink
               to="/dashboard"
               className={({ isActive }) => `nav-link btn-nav-admin ${isActive ? 'active' : ''}`}
+              data-testid="nav-dashboard"
             >
-              <BarChart3 size={16} /> Dashboard Admin
+              <BarChart3 size={16} aria-hidden="true" /> Dashboard Admin
             </NavLink>
           )}
         </nav>
@@ -70,7 +72,7 @@ export function Header() {
           {isAuthenticated ? (
             <div className="user-profile-menu">
               <div className="user-info-chip">
-                <div className="user-avatar-circle">
+                <div className="user-avatar-circle" aria-hidden="true">
                   {user?.role === 'admin' ? <Shield size={16} /> : <User size={16} />}
                 </div>
                 <div className="user-text-info">
@@ -86,16 +88,17 @@ export function Header() {
                 onClick={handleLogout}
                 title="Keluar dari akun"
                 aria-label="Logout"
+                data-testid="logout-button"
               >
-                <LogOut size={16} />
+                <LogOut size={16} aria-hidden="true" />
               </button>
             </div>
           ) : (
             <div className="auth-buttons-group">
-              <Link to="/login" className="btn btn-ghost">
+              <Link to="/login" className="btn btn-ghost" data-testid="header-login-link">
                 Masuk
               </Link>
-              <Link to="/register" className="btn btn-primary btn-sm">
+              <Link to="/register" className="btn btn-primary btn-sm" data-testid="header-register-link">
                 Daftar Warga
               </Link>
             </div>
@@ -108,23 +111,26 @@ export function Header() {
           className="mobile-menu-toggle mobile-only"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-expanded={mobileMenuOpen}
-          aria-label="Menu navigasi"
+          aria-label={mobileMenuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
+          aria-controls="mobile-navigation"
+          data-testid="mobile-menu-toggle"
         >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {mobileMenuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
         </button>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="mobile-nav-drawer mobile-only">
-          <nav className="mobile-nav-links">
+        <div className="mobile-nav-drawer mobile-only" id="mobile-navigation">
+          <nav className="mobile-nav-links" aria-label="Navigasi seluler">
             <NavLink
               to="/"
               className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
               onClick={closeMenu}
+              data-testid="mobile-nav-home"
               end
             >
-              <Home size={18} /> Beranda
+              <Home size={18} aria-hidden="true" /> Beranda
             </NavLink>
 
             {(!isAuthenticated || isWarga) && (
@@ -132,8 +138,9 @@ export function Header() {
                 to="/reports/new"
                 className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
                 onClick={closeMenu}
+                data-testid="mobile-nav-create-report"
               >
-                <PlusCircle size={18} /> Buat Laporan Lingkungan
+                <PlusCircle size={18} aria-hidden="true" /> Buat Laporan Lingkungan
               </NavLink>
             )}
 
@@ -142,12 +149,13 @@ export function Header() {
                 to="/dashboard"
                 className={({ isActive }) => `mobile-nav-item admin-item ${isActive ? 'active' : ''}`}
                 onClick={closeMenu}
+                data-testid="mobile-nav-dashboard"
               >
-                <BarChart3 size={18} /> Dashboard Administrator
+                <BarChart3 size={18} aria-hidden="true" /> Dashboard Administrator
               </NavLink>
             )}
 
-            <div className="mobile-auth-divider"></div>
+            <div className="mobile-auth-divider" aria-hidden="true"></div>
 
             {isAuthenticated ? (
               <div className="mobile-user-box">
@@ -158,16 +166,16 @@ export function Header() {
                     Peran: {user?.role === 'admin' ? 'Administrator' : 'Warga'}
                   </span>
                 </div>
-                <button type="button" className="btn btn-outline btn-full btn-danger" onClick={handleLogout}>
-                  <LogOut size={16} /> Keluar Akun
+                <button type="button" className="btn btn-outline btn-full btn-danger" onClick={handleLogout} data-testid="mobile-logout-button">
+                  <LogOut size={16} aria-hidden="true" /> Keluar Akun
                 </button>
               </div>
             ) : (
               <div className="mobile-auth-buttons">
-                <Link to="/login" className="btn btn-outline btn-full" onClick={closeMenu}>
+                <Link to="/login" className="btn btn-outline btn-full" onClick={closeMenu} data-testid="mobile-login-link">
                   Masuk ke Akun
                 </Link>
-                <Link to="/register" className="btn btn-primary btn-full" onClick={closeMenu}>
+                <Link to="/register" className="btn btn-primary btn-full" onClick={closeMenu} data-testid="mobile-register-link">
                   Daftar Akun Warga
                 </Link>
               </div>

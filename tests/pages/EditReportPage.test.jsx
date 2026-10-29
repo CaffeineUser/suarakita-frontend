@@ -139,7 +139,7 @@ describe('EditReportPage', () => {
     expect(window.alert).toHaveBeenCalledWith('Ukuran file foto maksimal 3 MB.');
     apiRequest.mockResolvedValueOnce({});
     await user.upload(input, new File(['image'], 'new.png', { type: 'image/png' }));
-    expect(await screen.findByRole('img', { name: 'Preview Foto Baru' })).toBeInTheDocument();
+    expect(await screen.findByRole('img', { name: 'Pratinjau foto pengganti yang dipilih' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Unggah Foto Baru' }));
     await waitFor(() => expect(apiRequest).toHaveBeenCalledWith('/reports/5/photo', expect.objectContaining({ method: 'PATCH' })));
     expect(await screen.findByText('Foto laporan berhasil diperbarui di server.')).toBeInTheDocument();
@@ -172,7 +172,7 @@ describe('EditReportPage', () => {
     await screen.findByDisplayValue('Jalan Berlubang');
     const input = document.querySelector('input[type="file"]');
     fireEvent.change(input, { target: { files: Object.assign([], { item() { return null; } }) } });
-    expect(screen.queryByRole('img', { name: 'Preview Foto Baru' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('img', { name: 'Pratinjau foto pengganti yang dipilih' })).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Kembali ke Detail' }));
     expect(screen.getByTestId('path')).toHaveTextContent('/reports/5');
   });

@@ -151,9 +151,9 @@ export function EditReportPage() {
   }
 
   return (
-    <div className="form-page-container">
+    <div className="form-page-container" data-testid="edit-report-page">
       <div className="form-header-bar">
-        <button type="button" className="btn-back-link" onClick={() => navigate(`/reports/${id}`)}>
+        <button type="button" className="btn-back-link" onClick={() => navigate(`/reports/${id}`)} data-testid="edit-report-back">
           <ArrowLeft size={18} /> Kembali ke Detail
         </button>
         <h1 className="form-page-title">Edit Laporan Lingkungan</h1>
@@ -173,13 +173,14 @@ export function EditReportPage() {
           </div>
         )}
 
-        <form onSubmit={handleUpdateData} className="report-create-form">
+        <form onSubmit={handleUpdateData} className="report-create-form" data-testid="edit-report-form">
           <div className="form-group">
             <label htmlFor="edit-title" className="form-label">
               Judul Laporan <span className="required">*</span>
             </label>
             <input
               id="edit-title"
+              name="title"
               type="text"
               required
               minLength={5}
@@ -187,6 +188,7 @@ export function EditReportPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="form-input"
+              data-testid="edit-title-input"
             />
           </div>
 
@@ -197,10 +199,12 @@ export function EditReportPage() {
               </label>
               <select
                 id="edit-cat"
+                name="category_id"
                 required
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
                 className="form-select"
+                data-testid="edit-category-select"
               >
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
@@ -216,10 +220,12 @@ export function EditReportPage() {
               </label>
               <select
                 id="edit-urgency"
+                name="urgency"
                 required
                 value={urgency}
                 onChange={(e) => setUrgency(e.target.value)}
                 className="form-select"
+                data-testid="edit-urgency-select"
               >
                 <option value="rendah">Rendah</option>
                 <option value="sedang">Sedang</option>
@@ -235,6 +241,7 @@ export function EditReportPage() {
             </label>
             <textarea
               id="edit-desc"
+              name="description"
               required
               minLength={10}
               maxLength={5000}
@@ -242,6 +249,7 @@ export function EditReportPage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="form-textarea"
+              data-testid="edit-description-input"
             />
           </div>
 
@@ -251,6 +259,7 @@ export function EditReportPage() {
             </label>
             <input
               id="edit-loc"
+              name="location_name"
               type="text"
               required
               minLength={3}
@@ -258,6 +267,7 @@ export function EditReportPage() {
               value={locationName}
               onChange={(e) => setLocationName(e.target.value)}
               className="form-input"
+              data-testid="edit-location-input"
             />
           </div>
 
@@ -268,22 +278,26 @@ export function EditReportPage() {
                 <label htmlFor="edit-lat" className="form-label-sub">Latitude</label>
                 <input
                   id="edit-lat"
+                  name="latitude"
                   type="number"
                   step="any"
                   value={latitude}
                   onChange={(e) => setLatitude(e.target.value)}
                   className="form-input"
+                  data-testid="edit-latitude-input"
                 />
               </div>
               <div className="form-group">
                 <label htmlFor="edit-lng" className="form-label-sub">Longitude</label>
                 <input
                   id="edit-lng"
+                  name="longitude"
                   type="number"
                   step="any"
                   value={longitude}
                   onChange={(e) => setLongitude(e.target.value)}
                   className="form-input"
+                  data-testid="edit-longitude-input"
                 />
               </div>
             </div>
@@ -295,10 +309,11 @@ export function EditReportPage() {
               className="btn btn-outline"
               onClick={() => navigate(`/reports/${id}`)}
               disabled={isSubmitting}
+              data-testid="edit-report-cancel"
             >
               Batal
             </button>
-            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+            <button type="submit" className="btn btn-primary" disabled={isSubmitting} data-testid="edit-report-submit">
               <Save size={18} /> {isSubmitting ? 'Menyimpan...' : 'Simpan Perubahan'}
             </button>
           </div>
@@ -306,7 +321,7 @@ export function EditReportPage() {
 
         {/* Section Ganti Foto Terpisah */}
         <div className="edit-photo-section">
-          <h3 className="section-subheading">Perbarui Foto Laporan</h3>
+          <h2 className="section-subheading">Perbarui Foto Laporan</h2>
           <p className="input-help-text" style={{ marginBottom: '1rem' }}>
             Anda dapat mengganti foto yang sudah diunggah dengan foto terbaru.
           </p>
@@ -328,22 +343,26 @@ export function EditReportPage() {
             </div>
 
             <div className="upload-new-photo-wrap">
-              <span className="photo-label">Pilih Foto Pengganti:</span>
+              <label className="photo-label" htmlFor="edit-photo-input">Pilih Foto Pengganti:</label>
               <input
+                id="edit-photo-input"
+                name="photo"
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
                 onChange={handlePhotoSelect}
                 className="form-input file-input"
+                data-testid="edit-photo-input"
               />
               {newPhotoPreview && (
                 <div style={{ marginTop: '0.75rem' }}>
-                  <img src={newPhotoPreview} alt="Preview Foto Baru" className="edit-thumbnail" />
+                  <img src={newPhotoPreview} alt="Pratinjau foto pengganti yang dipilih" className="edit-thumbnail" width="800" height="600" />
                   <div style={{ marginTop: '0.5rem' }}>
                     <button
                       type="button"
                       className="btn btn-primary btn-sm"
                       onClick={handleUploadNewPhoto}
                       disabled={isUpdatingPhoto}
+                      data-testid="edit-photo-upload"
                     >
                       <Upload size={14} /> {isUpdatingPhoto ? 'Mengunggah...' : 'Unggah Foto Baru'}
                     </button>

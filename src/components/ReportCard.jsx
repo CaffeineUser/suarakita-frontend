@@ -79,14 +79,22 @@ export function ReportCard({ report, onSupportChange }) {
   const photoUrl = getReportPhotoUrl(report.id);
 
   return (
-    <article className="report-card">
-      <Link to={`/reports/${report.id}`} className="report-card-image-wrap" tabIndex={-1}>
+    <article className="report-card" data-testid={`report-card-${report.id}`}>
+      <Link
+        to={`/reports/${report.id}`}
+        className="report-card-image-wrap"
+        tabIndex={-1}
+        aria-label={`Lihat detail laporan: ${report.title}`}
+      >
         {!imgError ? (
           <img
             src={photoUrl}
             alt={`Foto ${report.title}`}
             className="report-card-image"
             loading="lazy"
+            decoding="async"
+            width="400"
+            height="300"
             onError={() => setImgError(true)}
           />
         ) : (
@@ -112,7 +120,7 @@ export function ReportCard({ report, onSupportChange }) {
         </div>
 
         <h3 className="report-card-title">
-          <Link to={`/reports/${report.id}`} className="title-link">
+          <Link to={`/reports/${report.id}`} className="title-link" data-testid={`report-title-${report.id}`}>
             {report.title}
           </Link>
         </h3>
@@ -154,10 +162,12 @@ export function ReportCard({ report, onSupportChange }) {
                 ? 'Batalkan dukungan laporan'
                 : 'Dukung laporan ini'
             }
+            data-testid={`report-support-${report.id}`}
           >
             <Heart
               size={18}
               className={`heart-icon ${isSupported ? 'fill-current' : ''}`}
+              aria-hidden="true"
             />
             <span className="support-label">
               {isOwner ? 'Laporan Anda' : isSupported ? 'Didukung' : 'Dukung'}
@@ -166,7 +176,7 @@ export function ReportCard({ report, onSupportChange }) {
           </button>
         )}
 
-        <Link to={`/reports/${report.id}`} className="btn-detail-link">
+        <Link to={`/reports/${report.id}`} className="btn-detail-link" data-testid={`report-detail-${report.id}`}>
           Lihat Detail &rarr;
         </Link>
       </div>

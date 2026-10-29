@@ -3,8 +3,13 @@ import { AlertCircle, FileQuestion, Loader2, RefreshCw } from 'lucide-react';
 
 export function LoadingSpinner({ text = 'Memuat data...', fullPage = false }) {
   return (
-    <div className={`feedback-container loading-state ${fullPage ? 'full-page' : ''}`}>
-      <Loader2 className="spinner-icon animate-spin" size={36} />
+    <div
+      className={`feedback-container loading-state ${fullPage ? 'full-page' : ''}`}
+      role="status"
+      aria-live="polite"
+      data-testid="loading-state"
+    >
+      <Loader2 className="spinner-icon animate-spin" size={36} aria-hidden="true" />
       <p className="feedback-text">{text}</p>
     </div>
   );
@@ -17,14 +22,14 @@ export function EmptyState({
   onAction,
 }) {
   return (
-    <div className="feedback-container empty-state">
-      <div className="feedback-icon-wrapper">
+    <div className="feedback-container empty-state" data-testid="empty-state">
+      <div className="feedback-icon-wrapper" aria-hidden="true">
         <FileQuestion size={40} className="empty-icon" />
       </div>
       <h3 className="feedback-title">{title}</h3>
       <p className="feedback-text">{message}</p>
       {actionLabel && onAction && (
-        <button type="button" className="btn btn-outline" onClick={onAction}>
+        <button type="button" className="btn btn-outline" onClick={onAction} data-testid="empty-state-action">
           {actionLabel}
         </button>
       )}
@@ -38,14 +43,14 @@ export function ErrorMessage({
   onRetry,
 }) {
   return (
-    <div className="feedback-container error-state" role="alert">
-      <div className="feedback-icon-wrapper error-icon-bg">
+    <div className="feedback-container error-state" role="alert" data-testid="error-state">
+      <div className="feedback-icon-wrapper error-icon-bg" aria-hidden="true">
         <AlertCircle size={40} className="error-icon" />
       </div>
       <h3 className="feedback-title">{title}</h3>
       <p className="feedback-text">{message}</p>
       {onRetry && (
-        <button type="button" className="btn btn-primary btn-retry" onClick={onRetry}>
+        <button type="button" className="btn btn-primary btn-retry" onClick={onRetry} data-testid="error-retry">
           <RefreshCw size={16} /> Coba Lagi
         </button>
       )}

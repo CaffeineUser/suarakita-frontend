@@ -8,7 +8,7 @@ export function Footer() {
         <div className="footer-top-grid">
           <div className="footer-col brand-col">
             <div className="brand-logo footer-brand">
-              <span className="brand-symbol">🌱</span>
+              <span className="brand-symbol" aria-hidden="true">🌱</span>
               <span className="brand-name">SuaraKita</span>
             </div>
             <p className="footer-desc">
@@ -18,12 +18,12 @@ export function Footer() {
           </div>
 
           <div className="footer-col demo-accounts-col">
-            <h4 className="footer-heading">Akun Demo Lokal</h4>
+            <h2 className="footer-heading">Akun Demo Lokal</h2>
             <ul className="demo-accounts-list">
               <li>
                 <div className="demo-item">
                   <span className="demo-badge warga">
-                    <Users size={12} /> Warga
+                    <Users size={12} aria-hidden="true" /> Warga
                   </span>
                   <code>warga@example.com</code> / <code>WargaDemo123!</code>
                 </div>
@@ -31,7 +31,7 @@ export function Footer() {
               <li>
                 <div className="demo-item">
                   <span className="demo-badge admin">
-                    <ShieldCheck size={12} /> Admin
+                    <ShieldCheck size={12} aria-hidden="true" /> Admin
                   </span>
                   <code>admin@example.com</code> / <code>AdminDemo123!</code>
                 </div>
@@ -40,7 +40,7 @@ export function Footer() {
           </div>
 
           <div className="footer-col categories-col">
-            <h4 className="footer-heading">Kategori Laporan</h4>
+            <h2 className="footer-heading">Kategori Laporan</h2>
             <p className="footer-cat-tags">
               <span>Jalan Rusak</span>
               <span>Sampah Menumpuk</span>
@@ -55,7 +55,7 @@ export function Footer() {
             &copy; {new Date().getFullYear()} SuaraKita. Proyek Aplikasi Pelaporan Lingkungan Masyarakat.
           </p>
           <p className="made-with-text">
-            Dibangun dengan rasa peduli untuk lingkungan yang lebih baik <Heart size={14} className="heart-text-icon" />
+            Dibangun dengan rasa peduli untuk lingkungan yang lebih baik             <Heart size={14} className="heart-text-icon" aria-hidden="true" />
           </p>
         </div>
       </div>

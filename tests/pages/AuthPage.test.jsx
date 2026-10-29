@@ -47,7 +47,7 @@ describe('AuthPage', () => {
     await user.type(screen.getByLabelText(/Kata Sandi/), 'password123');
     await user.click(screen.getByRole('button', { name: 'Masuk ke Aplikasi' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('Kredensial tidak cocok');
-    await user.click(screen.getByRole('tab', { name: 'Daftar Warga' }));
+    await user.click(screen.getByTestId('auth-register-mode'));
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     expect(screen.getByLabelText(/Nama Lengkap/)).toBeRequired();
     const password = screen.getByLabelText(/Kata Sandi/);
@@ -104,7 +104,7 @@ describe('AuthPage', () => {
     const user = userEvent.setup();
     renderAuth(['/auth'], 'register');
     expect(screen.getByRole('heading', { name: 'Pendaftaran Akun Warga' })).toBeInTheDocument();
-    await user.click(screen.getByRole('tab', { name: 'Masuk Akun' }));
+    await user.click(screen.getByTestId('auth-login-mode'));
     expect(screen.getByRole('heading', { name: 'Selamat Datang Kembali' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Demo Admin' }));
     expect(screen.getByLabelText(/Alamat Email/)).toHaveValue('admin@example.com');

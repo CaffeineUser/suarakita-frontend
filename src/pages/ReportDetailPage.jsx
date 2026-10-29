@@ -24,6 +24,7 @@ import StatusBadge from '../components/StatusBadge.jsx';
 import UrgencyBadge from '../components/UrgencyBadge.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { formatDate, formatRelativeTime, STATUS_MAP } from '../utils/formatters.js';
+import PageMetadata from '../components/PageMetadata.jsx';
 
 // Transisi status sah
 const ALLOWED_NEXT_STATUSES = {
@@ -83,6 +84,9 @@ export function ReportDetailPage() {
   }
 
   useEffect(() => {
+    const imagePreload = new Image();
+    imagePreload.fetchPriority = 'high';
+    imagePreload.src = getReportPhotoUrl(id);
     fetchReportDetail();
   }, [id]);
 
@@ -195,7 +199,7 @@ export function ReportDetailPage() {
           onRetry={fetchReportDetail}
         />
         <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-          <button type="button" className="btn btn-outline" onClick={() => navigate('/')}>
+          <button type="button" className="btn btn-outline" onClick={() => navigate('/')} data-testid="report-detail-home">
             Kembali ke Beranda
           </button>
         </div>
@@ -212,10 +216,15 @@ export function ReportDetailPage() {
   const hasCoordinates = report.latitude !== null && report.longitude !== null;
 
   return (
-    <div className="report-detail-page">
+    <>
+    <PageMetadata
+      title={`${report.title} | SuaraKita`}
+      description={`${report.title}. ${report.description}`.slice(0, 160)}
+    />
+    <div className="report-detail-page" data-testid="report-detail-page">
       {/* Back button & Title bar */}
       <div className="detail-nav-bar">
-        <button type="button" className="btn-back-link" onClick={() => navigate('/')}>
+        <button type="button" className="btn-back-link" onClick={() => navigate('/')} data-testid="report-detail-back">
           <ArrowLeft size={18} /> Kembali ke Beranda
         </button>
 
@@ -229,6 +238,7 @@ export function ReportDetailPage() {
               className="btn btn-danger btn-sm"
               onClick={handleDeleteReport}
               disabled={isDeleting}
+              data-testid="report-delete"
             >
               <Trash2 size={15} /> {isDeleting ? 'Menghapus...' : 'Hapus Laporan'}
             </button>
@@ -240,7 +250,7 @@ export function ReportDetailPage() {
         <div className="alert-box alert-success" role="alert">
           <CheckCircle size={18} className="alert-icon" />
           <span>{successNotice}</span>
-          <button type="button" className="alert-dismiss-btn" onClick={() => setSuccessNotice('')}>
+          <button type="button" className="alert-dismiss-btn" onClick={() => setSuccessNotice('')} aria-label="Tutup notifikasi" data-testid="report-success-dismiss">
             &times;
           </button>
         </div>
@@ -255,13 +265,17 @@ export function ReportDetailPage() {
               src={photoUrl}
               alt={`Foto masalah ${report.title}`}
               className="detail-hero-image"
+              width="1200"
+              height="800"
+              decoding="async"
+              fetchPriority="high"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 e.currentTarget.nextElementSibling.style.display = 'flex';
               }}
             />
-            <div className="detail-image-fallback" style={{ display: 'none' }}>
-              <ImageOff size={48} />
+            <div className="detail-image-fallback" style={{ display: 'none' }} role="status">
+              <ImageOff size={48} aria-hidden="true" />
               <span>Foto tidak dapat dimuat atau telah diperbarui.</span>
             </div>
           </div>
@@ -315,14 +329,14 @@ export function ReportDetailPage() {
             </div>
 
             <div className="detail-desc-section">
-              <h3 className="section-subheading">Deskripsi Masalah</h3>
+              <h2 className="section-subheading">Deskripsi Masalah</h2>
               <p className="detail-description-text">{report.description}</p>
             </div>
           </div>
 
           {/* Timeline Riwayat Status */}
           <div className="detail-timeline-card">
-            <h3 className="section-subheading">Riwayat Perjalanan Laporan</h3>
+            <h2 className="section-subheading">Riwayat Perjalanan Laporan</h2>
             <p className="timeline-subtitle">
               Setiap pembaruan status dicatat secara transparan bersama waktu dan catatan petugas.
             </p>
@@ -369,7 +383,7 @@ export function ReportDetailPage() {
         <aside className="detail-sidebar">
           {/* Priority & Support Box */}
           <div className="sidebar-card priority-support-box">
-            <h3 className="sidebar-card-title">Skor Prioritas & Dukungan</h3>
+            <h2 className="sidebar-card-title">Skor Prioritas & Dukungan</h2>
             <p className="sidebar-card-desc">
               Skor dihitung otomatis berdasarkan tingkat urgensi (60%) dan jumlah dukungan warga (40%).
             </p>
@@ -397,6 +411,8 @@ export function ReportDetailPage() {
                   }`}
                   onClick={handleToggleSupport}
                   disabled={isSubmittingSupport || isOwner || isTerminal}
+                  aria-pressed={Boolean(report.is_supported_by_me)}
+                  data-testid="report-detail-support"
                 >
                   <Heart size={20} className={report.is_supported_by_me ? 'fill-current' : ''} />
                   <span>
@@ -430,7 +446,7 @@ export function ReportDetailPage() {
 
               {/* Status Transition Form */}
               <div className="admin-sub-section">
-                <h4 className="admin-sub-title">Perbarui Status Laporan</h4>
+                <h3 className="admin-sub-title">Perbarui Status Laporan</h3>
 
                 {statusActionError && (
                   <div className="alert-box alert-error alert-compact">
@@ -447,10 +463,12 @@ export function ReportDetailPage() {
                       </label>
                       <select
                         id="admin-select-status"
+                        name="status"
                         className="form-select select-sm"
                         value={newStatus}
                         onChange={(e) => setNewStatus(e.target.value)}
                         required
+                        data-testid="admin-status-select"
                       >
                         {nextStatuses.map((st) => (
                           <option key={st} value={st}>
@@ -466,11 +484,13 @@ export function ReportDetailPage() {
                       </label>
                       <textarea
                         id="admin-status-note"
+                        name="note"
                         rows={3}
                         className="form-textarea textarea-sm"
                         placeholder="Contoh: Tim DPU telah dikerahkan ke lokasi untuk penambalan aspal."
                         value={statusNote}
                         onChange={(e) => setStatusNote(e.target.value)}
+                        data-testid="admin-status-note"
                       />
                     </div>
 
@@ -478,6 +498,7 @@ export function ReportDetailPage() {
                       type="submit"
                       className="btn btn-primary btn-sm btn-full"
                       disabled={isSubmittingStatus}
+                      data-testid="admin-status-submit"
                     >
                       {isSubmittingStatus ? 'Menyimpan...' : 'Perbarui Status'}
                     </button>
@@ -492,7 +513,7 @@ export function ReportDetailPage() {
 
               {/* Urgency Update Form */}
               <div className="admin-sub-section urgency-edit-section">
-                <h4 className="admin-sub-title">Sesuaikan Tingkat Urgensi</h4>
+                <h3 className="admin-sub-title">Sesuaikan Tingkat Urgensi</h3>
 
                 {urgencyActionError && (
                   <div className="alert-box alert-error alert-compact">
@@ -530,6 +551,7 @@ export function ReportDetailPage() {
                   <div className="form-group">
                     <select
                       id="admin-select-urgency"
+                      name="urgency"
                       className="form-select select-sm"
                       value={newUrgency}
                       onChange={(e) => {
@@ -537,6 +559,8 @@ export function ReportDetailPage() {
                         setUrgencySuccessNotice(false);
                       }}
                       required
+                      aria-label="Tingkat urgensi baru"
+                      data-testid="admin-urgency-select"
                     >
                       <option value="rendah">Rendah</option>
                       <option value="sedang">Sedang</option>
@@ -548,6 +572,7 @@ export function ReportDetailPage() {
                     type="submit"
                     className="btn btn-outline btn-sm btn-full"
                     disabled={isSubmittingUrgency || newUrgency === report.urgency}
+                    data-testid="admin-urgency-submit"
                   >
                     {isSubmittingUrgency ? 'Menyimpan...' : 'Perbarui Urgensi & Skor'}
                   </button>
@@ -558,6 +583,7 @@ export function ReportDetailPage() {
         </aside>
       </div>
     </div>
+    </>
   );
 }
 

@@ -61,31 +61,30 @@ export function AuthPage({ initialMode = 'login' }) {
   }
 
   return (
-    <div className="auth-page-wrapper">
+    <div className="auth-page-wrapper" data-testid="auth-page">
       <div className="auth-card">
-        {/* Auth Tabs */}
-        <div className="auth-tabs-header" role="tablist">
+        <div className="auth-tabs-header" role="group" aria-label="Pilih jenis akun">
           <button
             type="button"
             className={`auth-tab-btn ${isLoginMode ? 'active' : ''}`}
+            aria-pressed={isLoginMode}
             onClick={() => {
               setIsLoginMode(true);
               setErrorMessage('');
             }}
-            role="tab"
-            aria-selected={isLoginMode}
+            data-testid="auth-login-mode"
           >
             Masuk Akun
           </button>
           <button
             type="button"
             className={`auth-tab-btn ${!isLoginMode ? 'active' : ''}`}
+            aria-pressed={!isLoginMode}
             onClick={() => {
               setIsLoginMode(false);
               setErrorMessage('');
             }}
-            role="tab"
-            aria-selected={!isLoginMode}
+            data-testid="auth-register-mode"
           >
             Daftar Warga
           </button>
@@ -105,29 +104,32 @@ export function AuthPage({ initialMode = 'login' }) {
 
           {errorMessage && (
             <div className="alert-box alert-error" role="alert">
-              <AlertCircle size={18} className="alert-icon" />
+              <AlertCircle size={18} className="alert-icon" aria-hidden="true" />
               <span>{errorMessage}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="auth-form">
+          <form onSubmit={handleSubmit} className="auth-form" data-testid="auth-form">
             {!isLoginMode && (
               <div className="form-group">
                 <label htmlFor="auth-name" className="form-label">
                   Nama Lengkap <span className="required">*</span>
                 </label>
                 <div className="input-with-icon">
-                  <User size={18} className="field-icon" />
+                  <User size={18} className="field-icon" aria-hidden="true" />
                   <input
                     id="auth-name"
+                    name="name"
                     type="text"
                     required
                     minLength={3}
                     maxLength={100}
+                    autoComplete="name"
                     placeholder="Contoh: Budi Santoso"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="form-input"
+                    data-testid="auth-name-input"
                   />
                 </div>
               </div>
@@ -138,15 +140,18 @@ export function AuthPage({ initialMode = 'login' }) {
                 Alamat Email <span className="required">*</span>
               </label>
               <div className="input-with-icon">
-                <Mail size={18} className="field-icon" />
+                <Mail size={18} className="field-icon" aria-hidden="true" />
                 <input
                   id="auth-email"
+                  name="email"
                   type="email"
                   required
+                  autoComplete="email"
                   placeholder="nama@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="form-input"
+                  data-testid="auth-email-input"
                 />
               </div>
             </div>
@@ -156,24 +161,29 @@ export function AuthPage({ initialMode = 'login' }) {
                 Kata Sandi <span className="required">*</span>
               </label>
               <div className="input-with-icon">
-                <Lock size={18} className="field-icon" />
+                <Lock size={18} className="field-icon" aria-hidden="true" />
                 <input
                   id="auth-password"
+                  name="password"
                   type={showPassword ? 'text' : 'password'}
                   required
                   minLength={8}
+                  autoComplete={isLoginMode ? 'current-password' : 'new-password'}
                   placeholder={isLoginMode ? 'Masukkan kata sandi' : 'Minimal 8 karakter'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="form-input"
+                  data-testid="auth-password-input"
                 />
                 <button
                   type="button"
                   className="password-toggle-btn"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'}
+                  aria-pressed={showPassword}
+                  data-testid="auth-password-visibility"
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
                 </button>
               </div>
               {!isLoginMode && (
@@ -181,7 +191,7 @@ export function AuthPage({ initialMode = 'login' }) {
               )}
             </div>
 
-            <button type="submit" className="btn btn-primary btn-full btn-auth-submit" disabled={isLoading}>
+            <button type="submit" className="btn btn-primary btn-full btn-auth-submit" disabled={isLoading} data-testid="auth-submit">
               {isLoading
                 ? 'Memproses...'
                 : isLoginMode
@@ -198,15 +208,17 @@ export function AuthPage({ initialMode = 'login' }) {
                 type="button"
                 className="btn-demo-quick warga"
                 onClick={() => handleFillDemo('warga@example.com', 'WargaDemo123!')}
+                data-testid="auth-demo-citizen"
               >
-                <Users size={14} /> Demo Warga
+                <Users size={14} aria-hidden="true" /> Demo Warga
               </button>
               <button
                 type="button"
                 className="btn-demo-quick admin"
                 onClick={() => handleFillDemo('admin@example.com', 'AdminDemo123!')}
+                data-testid="auth-demo-admin"
               >
-                <ShieldCheck size={14} /> Demo Admin
+                <ShieldCheck size={14} aria-hidden="true" /> Demo Admin
               </button>
             </div>
           </div>

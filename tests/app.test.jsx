@@ -67,10 +67,10 @@ describe('App routing', () => {
     ['/reports/12/edit', 'Edit report route'],
     ['/dashboard', 'Dashboard route'],
     ['/unknown-path', 'Not found route'],
-  ])('renders the route for %s', (path, expectedHeading) => {
+  ])('renders the route for %s', async (path, expectedHeading) => {
     renderRoute(path);
 
-    expect(screen.getByRole('heading', { name: expectedHeading })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: expectedHeading })).toBeInTheDocument();
     expect(screen.getByText('Header mock')).toBeInTheDocument();
     expect(screen.getByText('Footer mock')).toBeInTheDocument();
   });

@@ -85,7 +85,7 @@ export function DashboardPage() {
 
   if (error) {
     return (
-      <div className="dashboard-container">
+      <div className="dashboard-container" data-testid="dashboard-page">
         <ErrorMessage
           title="Gagal Memuat Dashboard"
           message={error}
@@ -109,7 +109,7 @@ export function DashboardPage() {
   }));
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-container" data-testid="dashboard-page">
       {/* Dashboard Top Header */}
       <div className="dashboard-header-bar">
         <div>
@@ -126,6 +126,7 @@ export function DashboardPage() {
           className="btn btn-outline btn-refresh"
           onClick={fetchDashboardData}
           title="Perbarui Data"
+          data-testid="dashboard-refresh"
         >
           <RefreshCw size={16} /> Segarkan Data
         </button>
@@ -133,8 +134,8 @@ export function DashboardPage() {
 
       {/* Metrics Cards Grid */}
       <div className="metrics-grid">
-        <div className="metric-card card-total">
-          <div className="metric-icon-wrap bg-blue-subtle">
+        <div className="metric-card card-total" data-testid="dashboard-metric-total-reports">
+          <div className="metric-icon-wrap bg-blue-subtle" aria-hidden="true">
             <FileText size={22} className="text-blue" />
           </div>
           <div className="metric-content">
@@ -143,8 +144,8 @@ export function DashboardPage() {
           </div>
         </div>
 
-        <div className="metric-card card-pending">
-          <div className="metric-icon-wrap bg-amber-subtle">
+        <div className="metric-card card-pending" data-testid="dashboard-metric-pending">
+          <div className="metric-icon-wrap bg-amber-subtle" aria-hidden="true">
             <Clock size={22} className="text-amber" />
           </div>
           <div className="metric-content">
@@ -153,8 +154,8 @@ export function DashboardPage() {
           </div>
         </div>
 
-        <div className="metric-card card-process">
-          <div className="metric-icon-wrap bg-purple-subtle">
+        <div className="metric-card card-process" data-testid="dashboard-metric-in-progress">
+          <div className="metric-icon-wrap bg-purple-subtle" aria-hidden="true">
             <Wrench size={22} className="text-purple" />
           </div>
           <div className="metric-content">
@@ -163,8 +164,8 @@ export function DashboardPage() {
           </div>
         </div>
 
-        <div className="metric-card card-done">
-          <div className="metric-icon-wrap bg-green-subtle">
+        <div className="metric-card card-done" data-testid="dashboard-metric-completed">
+          <div className="metric-icon-wrap bg-green-subtle" aria-hidden="true">
             <CheckCircle2 size={22} className="text-green" />
           </div>
           <div className="metric-content">
@@ -173,8 +174,8 @@ export function DashboardPage() {
           </div>
         </div>
 
-        <div className="metric-card card-supports">
-          <div className="metric-icon-wrap bg-pink-subtle">
+        <div className="metric-card card-supports" data-testid="dashboard-metric-supports">
+          <div className="metric-icon-wrap bg-pink-subtle" aria-hidden="true">
             <Heart size={22} className="text-pink" />
           </div>
           <div className="metric-content">
@@ -183,8 +184,8 @@ export function DashboardPage() {
           </div>
         </div>
 
-        <div className="metric-card card-users">
-          <div className="metric-icon-wrap bg-emerald-subtle">
+        <div className="metric-card card-users" data-testid="dashboard-metric-users">
+          <div className="metric-icon-wrap bg-emerald-subtle" aria-hidden="true">
             <Users size={22} className="text-emerald" />
           </div>
           <div className="metric-content">
@@ -199,10 +200,10 @@ export function DashboardPage() {
         {/* Category Bar Chart */}
         <div className="chart-card">
           <div className="chart-card-header">
-            <h3 className="chart-title">Distribusi Laporan per Kategori</h3>
+            <h2 className="chart-title">Distribusi Laporan per Kategori</h2>
             <span className="chart-subtitle">Jumlah masalah yang tercatat di setiap kategori</span>
           </div>
-          <div className="chart-body">
+          <div className="chart-body" role="img" aria-label="Grafik distribusi laporan berdasarkan kategori">
             {categoryChartData.length > 0 ? (
               <ResponsiveContainer width="100%" height={260}>
                 <BarChart data={categoryChartData} margin={{ top: 20, right: 20, left: -10, bottom: 25 }}>
@@ -225,10 +226,10 @@ export function DashboardPage() {
         {/* Status Pie Chart */}
         <div className="chart-card">
           <div className="chart-card-header">
-            <h3 className="chart-title">Status Penanganan Laporan</h3>
+            <h2 className="chart-title">Status Penanganan Laporan</h2>
             <span className="chart-subtitle">Proporsi laporan dari diajukan hingga selesai</span>
           </div>
-          <div className="chart-body">
+          <div className="chart-body" role="img" aria-label="Grafik proporsi status penanganan laporan">
             {statusChartData.some((s) => s.count > 0) ? (
               <ResponsiveContainer width="100%" height={260}>
                 <PieChart>
@@ -270,7 +271,7 @@ export function DashboardPage() {
       <section className="priority-table-card">
         <div className="table-header-row">
           <div>
-            <h3 className="chart-title">10 Laporan Prioritas Tertinggi</h3>
+            <h2 className="chart-title">10 Laporan Prioritas Tertinggi</h2>
             <p className="chart-subtitle">
               Disortir berdasarkan formula bisnis resmi gabungan tingkat urgensi dan kuantitas dukungan warga.
             </p>
@@ -281,7 +282,7 @@ export function DashboardPage() {
         </div>
 
         {priorityReports.length > 0 ? (
-          <div className="table-responsive-wrapper">
+          <div className="table-responsive-wrapper" data-testid="dashboard-priority-table">
             <table className="dashboard-table">
               <thead>
                 <tr>

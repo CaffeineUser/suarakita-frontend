@@ -131,7 +131,7 @@ describe('CreateReportPage', () => {
 
     const photo = new File(['image'], 'jalan.jpg', { type: 'image/jpeg' });
     await user.upload(input, photo);
-    expect(await screen.findByRole('img', { name: 'Preview Foto Laporan' })).toBeInTheDocument();
+    expect(await screen.findByRole('img', { name: 'Pratinjau foto laporan yang dipilih' })).toBeInTheDocument();
     expect(screen.getByText('jalan.jpg')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /Hapus & Ganti/ }));
     expect(screen.getByText('Klik atau seret file foto ke sini')).toBeInTheDocument();

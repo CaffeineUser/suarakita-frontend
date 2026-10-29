@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ArrowUpDown,
   Filter,
@@ -16,6 +16,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 
 export function HomePage() {
   const { isAuthenticated, isWarga } = useAuth();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // State parameter query
@@ -126,7 +127,7 @@ export function HomePage() {
   );
 
   return (
-    <div className="home-page-container">
+    <div className="home-page-container" data-testid="home-page">
       {/* Hero Section */}
       <section className="hero-banner" aria-labelledby="hero-title">
         <div className="hero-badge">
@@ -142,7 +143,7 @@ export function HomePage() {
         <div className="hero-cta-buttons">
           {(!isAuthenticated || isWarga) && (
             <Link to="/reports/new" className="btn btn-primary btn-lg">
-              <PlusCircle size={20} /> Buat Laporan Baru
+              <PlusCircle size={20} aria-hidden="true" /> Buat Laporan Baru
             </Link>
           )}
           <a href="#reports-explorer" className="btn btn-outline btn-lg">
@@ -164,16 +165,19 @@ export function HomePage() {
 
         {/* Filter Bar Controls */}
         <div className="filter-controls-card">
-          <form onSubmit={handleSearchSubmit} className="search-form-row">
+          <form onSubmit={handleSearchSubmit} className="search-form-row" role="search" data-testid="report-search-form">
             <div className="search-input-group">
               <Search size={18} className="search-input-icon" />
               <input
                 type="text"
+                id="report-search"
+                name="q"
                 placeholder="Cari kata kunci judul, deskripsi, atau nama lokasi..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 className="search-input-field"
                 aria-label="Pencarian laporan"
+                data-testid="report-search-input"
               />
               {searchInput && (
                 <button
@@ -184,24 +188,25 @@ export function HomePage() {
                     updateQuery({ q: '' });
                   }}
                   aria-label="Hapus kata kunci"
+                  data-testid="report-search-clear"
                 >
                   &times;
                 </button>
               )}
             </div>
-            <button type="submit" className="btn btn-primary btn-search">
+            <button type="submit" className="btn btn-primary btn-search" data-testid="report-search-submit">
               Cari
             </button>
           </form>
 
           {/* Category Filter Pills */}
-          <div className="category-pills-row" role="tablist" aria-label="Filter Kategori">
+          <div className="category-pills-row" role="group" aria-label="Filter Kategori" data-testid="category-filters">
             <button
               type="button"
               className={`category-pill ${queryCategory === '' ? 'active' : ''}`}
               onClick={() => updateQuery({ category_id: '' })}
-              role="tab"
-              aria-selected={queryCategory === ''}
+              aria-pressed={queryCategory === ''}
+              data-testid="category-filter-all"
             >
               Semua Kategori
             </button>
@@ -211,8 +216,8 @@ export function HomePage() {
                 type="button"
                 className={`category-pill ${queryCategory === String(cat.id) ? 'active' : ''}`}
                 onClick={() => updateQuery({ category_id: cat.id })}
-                role="tab"
-                aria-selected={queryCategory === String(cat.id)}
+                aria-pressed={queryCategory === String(cat.id)}
+                data-testid={`category-filter-${cat.id}`}
               >
                 {cat.name}
               </button>
@@ -227,9 +232,11 @@ export function HomePage() {
               </label>
               <select
                 id="filter-status"
+                name="status"
                 className="filter-select"
                 value={queryStatus}
                 onChange={(e) => updateQuery({ status: e.target.value })}
+                data-testid="report-filter-status"
               >
                 <option value="">Semua Status</option>
                 <option value="diajukan">Diajukan</option>
@@ -246,9 +253,11 @@ export function HomePage() {
               </label>
               <select
                 id="filter-urgency"
+                name="urgency"
                 className="filter-select"
                 value={queryUrgency}
                 onChange={(e) => updateQuery({ urgency: e.target.value })}
+                data-testid="report-filter-urgency"
               >
                 <option value="">Semua Urgensi</option>
                 <option value="kritis">Kritis</option>
@@ -264,12 +273,14 @@ export function HomePage() {
               </label>
               <select
                 id="filter-sort"
+                name="sort"
                 className="filter-select"
                 value={`${querySort}_${queryOrder.toLowerCase()}`}
                 onChange={(e) => {
                   const [s, o] = e.target.value.split('_');
                   updateQuery({ sort: s, order: o });
                 }}
+                data-testid="report-filter-sort"
               >
                 <option value="priority_score_desc">Prioritas Tertinggi (Default)</option>
                 <option value="created_at_desc">Terbaru</option>
@@ -285,6 +296,7 @@ export function HomePage() {
                 className="btn btn-ghost btn-reset-filters"
                 onClick={handleResetFilters}
                 title="Kembalikan semua filter ke awal"
+                data-testid="report-filter-reset"
               >
                 <RotateCcw size={14} /> Reset Filter
               </button>
@@ -293,6 +305,7 @@ export function HomePage() {
         </div>
 
         {/* Content Section: 4 States (Loading, Error, Empty, Success Data) */}
+        <div className="report-results" aria-live="polite" aria-busy={loading} data-testid="report-results">
         {loading ? (
           <LoadingSpinner text="Memuat daftar laporan lingkungan..." />
         ) : error ? (
@@ -310,7 +323,7 @@ export function HomePage() {
                 : 'Belum ada laporan lingkungan yang dibuat warga saat ini.'
             }
             actionLabel={hasActiveFilters ? 'Reset Filter' : 'Buat Laporan Pertama'}
-            onAction={hasActiveFilters ? handleResetFilters : () => (window.location.href = '/reports/new')}
+            onAction={hasActiveFilters ? handleResetFilters : () => navigate('/reports/new')}
           />
         ) : (
           <>
@@ -334,6 +347,7 @@ export function HomePage() {
             />
           </>
         )}
+        </div>
       </section>
     </div>
   );

@@ -105,11 +105,56 @@ input, textarea, select {
   font-size: 0.95rem;
 }
 
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  color: #ffffff;
+  background: var(--brand-green);
+  border-radius: var(--radius-sm);
+  transform: translateY(-160%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+:focus-visible {
+  outline: 3px solid #0b63ce;
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.report-results {
+  min-height: 20rem;
+}
+
 /* App Shell Layout */
 .app-shell {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .app-main-content {
@@ -118,6 +163,22 @@ input, textarea, select {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1.5rem 1.25rem 3.5rem;
+}
+
+.app-main-content.route-auth {
+  min-height: 100vh;
+}
+
+.app-main-content.route-detail {
+  min-height: 120vh;
+}
+
+.app-main-content.route-form {
+  min-height: 130vh;
+}
+
+.app-main-content.route-dashboard {
+  min-height: 180vh;
 }
 
 /* ==========================================================================
@@ -593,6 +654,7 @@ input, textarea, select {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-height: 2.5rem;
   overflow-x: auto;
   padding-bottom: 0.25rem;
   scrollbar-width: thin;
@@ -2208,6 +2270,10 @@ input, textarea, select {
   box-shadow: var(--shadow-sm);
 }
 
+.auth-tab-btn:not(.active) {
+  color: var(--neutral-600);
+}
+
 .auth-card-body {
   padding: 2rem;
 }
@@ -2475,6 +2541,18 @@ input, textarea, select {
 }
 
 @media (max-width: 768px) {
+  .app-main-content.route-detail {
+    min-height: 220vh;
+  }
+
+  .app-main-content.route-form {
+    min-height: 170vh;
+  }
+
+  .app-main-content.route-dashboard {
+    min-height: 220vh;
+  }
+
   .desktop-only {
     display: none !important;
   }
