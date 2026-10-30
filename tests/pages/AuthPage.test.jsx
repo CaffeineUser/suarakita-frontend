@@ -31,7 +31,10 @@ describe('AuthPage', () => {
   it('authenticates with trimmed credentials and returns to the originating route', async () => {
     const user = userEvent.setup();
     auth.login.mockResolvedValueOnce({});
-    renderAuth([{ pathname: '/login', state: { from: { pathname: '/dashboard' } } }]);
+    renderAuth([{ pathname: '/auth/login', state: { from: { pathname: '/dashboard' } } }]);
+    expect(screen.getByLabelText(/Alamat Email/)).toHaveAttribute('id', 'username');
+    expect(screen.getByLabelText(/Kata Sandi/)).toHaveAttribute('id', 'password');
+    expect(screen.getByRole('button', { name: 'Masuk ke Aplikasi' })).toHaveAttribute('id', 'btn-submit');
     await user.type(screen.getByLabelText(/Alamat Email/), '  warga@example.test  ');
     await user.type(screen.getByLabelText(/Kata Sandi/), 'password123');
     await user.click(screen.getByRole('button', { name: 'Masuk ke Aplikasi' }));

@@ -62,6 +62,7 @@ describe('App routing', () => {
     ['/', 'Home route'],
     ['/reports/12', 'Report detail route'],
     ['/login', 'login auth route'],
+    ['/auth/login', 'login auth route'],
     ['/register', 'register auth route'],
     ['/reports/new', 'Create report route'],
     ['/reports/12/edit', 'Edit report route'],

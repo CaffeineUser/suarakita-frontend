@@ -136,13 +136,13 @@ export function AuthPage({ initialMode = 'login' }) {
             )}
 
             <div className="form-group">
-              <label htmlFor="auth-email" className="form-label">
+              <label htmlFor="username" className="form-label">
                 Alamat Email <span className="required">*</span>
               </label>
               <div className="input-with-icon">
                 <Mail size={18} className="field-icon" aria-hidden="true" />
                 <input
-                  id="auth-email"
+                  id="username"
                   name="email"
                   type="email"
                   required
@@ -157,13 +157,13 @@ export function AuthPage({ initialMode = 'login' }) {
             </div>
 
             <div className="form-group">
-              <label htmlFor="auth-password" className="form-label">
+              <label htmlFor="password" className="form-label">
                 Kata Sandi <span className="required">*</span>
               </label>
               <div className="input-with-icon">
                 <Lock size={18} className="field-icon" aria-hidden="true" />
                 <input
-                  id="auth-password"
+                  id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   required
@@ -191,7 +191,7 @@ export function AuthPage({ initialMode = 'login' }) {
               )}
             </div>
 
-            <button type="submit" className="btn btn-primary btn-full btn-auth-submit" disabled={isLoading} data-testid="auth-submit">
+            <button id="btn-submit" type="submit" className="btn btn-primary btn-full btn-auth-submit" disabled={isLoading} data-testid="auth-submit">
               {isLoading
                 ? 'Memproses...'
                 : isLoginMode

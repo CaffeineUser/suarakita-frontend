@@ -22,9 +22,9 @@ function getPageMetadata(pathname) {
       description: 'Laporkan, dukung, dan pantau perbaikan masalah fasilitas umum dan lingkungan di sekitar Anda.',
     };
   }
-  if (pathname === '/login' || pathname === '/register') {
+  if (pathname === '/login' || pathname === '/auth/login' || pathname === '/register') {
     return {
-      title: `${pathname === '/login' ? 'Masuk' : 'Daftar'} | SuaraKita`,
+      title: `${pathname === '/register' ? 'Daftar' : 'Masuk'} | SuaraKita`,
       description: 'Akses SuaraKita untuk membuat dan memantau laporan lingkungan warga.',
     };
   }
@@ -59,7 +59,7 @@ function getPageMetadata(pathname) {
 }
 
 function getPageLayoutClass(pathname) {
-  if (pathname === '/login' || pathname === '/register') return 'route-auth';
+  if (pathname === '/login' || pathname === '/auth/login' || pathname === '/register') return 'route-auth';
   if (/^\/reports\/[^/]+$/.test(pathname)) return 'route-detail';
   if (pathname === '/reports/new' || /^\/reports\/[^/]+\/edit$/.test(pathname)) {
     return 'route-form';
@@ -95,6 +95,14 @@ function App() {
             {/* Rute Tamu (Hanya jika belum login) */}
             <Route
               path="/login"
+              element={
+                <GuestRoute>
+                  <AuthPage key="login" initialMode="login" />
+                </GuestRoute>
+              }
+            />
+            <Route
+              path="/auth/login"
               element={
                 <GuestRoute>
                   <AuthPage key="login" initialMode="login" />
