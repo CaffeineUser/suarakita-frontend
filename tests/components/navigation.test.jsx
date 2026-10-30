@@ -145,6 +145,21 @@ describe('route guards', () => {
     expect(screen.getByText('Login route')).toBeInTheDocument();
   });
 
+  it('renders a guest preview when a protected route allows one', () => {
+    function Preview({ isGuestPreview }) {
+      return <p>{isGuestPreview ? 'Read-only preview' : 'Private content'}</p>;
+    }
+
+    renderAt(
+      <ProtectedRoute allowGuestPreview>
+        <Preview />
+      </ProtectedRoute>,
+      '/reports/new',
+    );
+
+    expect(screen.getByText('Read-only preview')).toBeInTheDocument();
+  });
+
   it('allows permitted users and redirects disallowed roles home', () => {
     auth.value = { user: { role: 'warga' }, isAuthenticated: true, isAdmin: false, isWarga: true, isLoading: false, logout: vi.fn() };
     const allowed = renderAt(<ProtectedRoute allowedRoles={['warga']}><p>Private content</p></ProtectedRoute>);

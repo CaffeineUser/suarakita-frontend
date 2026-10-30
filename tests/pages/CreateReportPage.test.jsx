@@ -15,11 +15,11 @@ function Path() {
   const location = useLocation();
   return <output data-testid="location">{location.pathname}{JSON.stringify(location.state || {})}</output>;
 }
-function renderPage() {
+function renderPage({ isGuestPreview = false } = {}) {
   return render(
     <MemoryRouter initialEntries={['/reports/new']}>
       <Path />
-      <Routes><Route path="*" element={<CreateReportPage />} /></Routes>
+      <Routes><Route path="*" element={<CreateReportPage isGuestPreview={isGuestPreview} />} /></Routes>
     </MemoryRouter>,
   );
 }
@@ -49,6 +49,20 @@ describe('CreateReportPage', () => {
     expect(await screen.findByRole('option', { name: 'Sampah' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Kembali' }));
     expect(screen.getByTestId('location')).toHaveTextContent('/');
+  });
+
+  it('shows a read-only report form to guests with a login link back to this route', async () => {
+    renderPage({ isGuestPreview: true });
+
+    expect(await screen.findByRole('heading', { name: 'Buat Laporan Lingkungan Baru' })).toBeInTheDocument();
+    expect(screen.getByText('Masuk untuk membuat laporan')).toBeInTheDocument();
+    expect(screen.getByLabelText(/Judul Laporan/)).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Kirim Laporan' })).toBeDisabled();
+
+    await userEvent.setup().click(screen.getByRole('link', { name: 'Masuk' }));
+
+    expect(screen.getByTestId('location')).toHaveTextContent('/login');
+    expect(screen.getByTestId('location')).toHaveTextContent('"/reports/new"');
   });
 
   it('reports category load errors and required frontend validation failures', async () => {

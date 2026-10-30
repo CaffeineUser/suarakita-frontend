@@ -24,6 +24,10 @@ Development dan preview lokal memakai proxy Vite yang sama. Pada hosting lain,
 konfigurasikan reverse proxy `/api/v1` ke backend atau gunakan URL backend
 langsung dan izinkan origin frontend melalui CORS.
 
+Halaman `/reports/new` dapat dibuka tanpa login sebagai pratinjau read-only;
+warga harus masuk untuk mengisi dan mengirim laporan. Endpoint pembuatan laporan
+tetap dilindungi autentikasi di backend.
+
 ## Pengujian frontend dan selector automation
 
 Jalankan `bun run test` untuk unit test dan pemeriksaan aksesibilitas axe-core.

@@ -1247,6 +1247,17 @@ input, textarea, select {
   color: var(--rose-text);
 }
 
+.alert-info {
+  align-items: flex-start;
+  background-color: var(--blue-bg);
+  border: 1px solid var(--blue-border);
+  color: var(--blue-text);
+}
+
+.alert-info p {
+  margin-top: 0.25rem;
+}
+
 .alert-success {
   background-color: var(--emerald-bg);
   border: 1px solid var(--emerald-border);

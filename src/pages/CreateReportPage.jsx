@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   AlertCircle,
   ArrowLeft,
@@ -14,8 +14,9 @@ import {
 import { api, apiRequest } from '../api/client.js';
 import { LoadingSpinner } from '../components/Feedback.jsx';
 
-export function CreateReportPage() {
+export function CreateReportPage({ isGuestPreview = false }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Form states
   const [title, setTitle] = useState('');
@@ -179,6 +180,24 @@ export function CreateReportPage() {
       </div>
 
       <div className="form-card">
+        {isGuestPreview && (
+          <div className="alert-box alert-info" role="status">
+            <Info size={22} aria-hidden="true" />
+            <div>
+              <strong>Masuk untuk membuat laporan</strong>
+              <p>Formulir ini tersedia untuk dilihat. Silakan masuk sebagai warga untuk mengisi dan mengirim laporan.</p>
+            </div>
+            <Link
+              to="/login"
+              state={{ from: location }}
+              className="btn btn-primary"
+              data-testid="create-report-login"
+            >
+              Masuk
+            </Link>
+          </div>
+        )}
+
         {errorMessage && (
           <div className="alert-box alert-error" role="alert" style={{ scrollMarginTop: '100px' }}>
             <AlertCircle size={22} className="alert-icon" style={{ flexShrink: 0 }} />
@@ -204,6 +223,7 @@ export function CreateReportPage() {
               maxLength={150}
               placeholder="Contoh: Aspal Amblas dan Berlubang Parah di Depan Sekolah"
               value={title}
+              disabled={isGuestPreview}
               onChange={(e) => setTitle(e.target.value)}
               className="form-input"
               data-testid="report-title-input"
@@ -227,6 +247,7 @@ export function CreateReportPage() {
                 name="category_id"
                 required
                 value={categoryId}
+                disabled={isGuestPreview}
                 onChange={(e) => setCategoryId(e.target.value)}
                 className="form-select"
                 data-testid="report-category-select"
@@ -248,6 +269,7 @@ export function CreateReportPage() {
                 name="urgency"
                 required
                 value={urgency}
+                disabled={isGuestPreview}
                 onChange={(e) => setUrgency(e.target.value)}
                 className="form-select"
                 data-testid="report-urgency-select"
@@ -274,6 +296,7 @@ export function CreateReportPage() {
               rows={5}
               placeholder="Jelaskan kondisi kerusakan, potensi bahaya, atau kronologi masalah lingkungan yang terjadi secara rinci..."
               value={description}
+              disabled={isGuestPreview}
               onChange={(e) => setDescription(e.target.value)}
               className="form-textarea"
               data-testid="report-description-input"
@@ -304,6 +327,7 @@ export function CreateReportPage() {
                 maxLength={300}
                 placeholder="Contoh: Jl. Pahlawan RT 02/RW 04, Patokan depan Toko Roti"
                 value={locationName}
+                disabled={isGuestPreview}
                 onChange={(e) => setLocationName(e.target.value)}
                 className="form-input"
                 data-testid="report-location-input"
@@ -331,6 +355,7 @@ export function CreateReportPage() {
                   step="any"
                   placeholder="Contoh: -6.2088"
                   value={latitude}
+                  disabled={isGuestPreview}
                   onChange={(e) => setLatitude(e.target.value)}
                   className="form-input"
                   data-testid="report-latitude-input"
@@ -347,6 +372,7 @@ export function CreateReportPage() {
                   step="any"
                   placeholder="Contoh: 106.8456"
                   value={longitude}
+                  disabled={isGuestPreview}
                   onChange={(e) => setLongitude(e.target.value)}
                   className="form-input"
                   data-testid="report-longitude-input"
@@ -376,6 +402,7 @@ export function CreateReportPage() {
                   accept="image/jpeg,image/png,image/webp"
                   aria-label="Foto bukti laporan"
                   required
+                  disabled={isGuestPreview}
                   onChange={handlePhotoSelect}
                   className="file-input-hidden"
                   data-testid="report-photo-input"
@@ -390,6 +417,7 @@ export function CreateReportPage() {
                     type="button"
                     className="btn btn-sm btn-danger"
                     onClick={handleRemovePhoto}
+                    disabled={isGuestPreview}
                     title="Ganti foto"
                     data-testid="report-photo-remove"
                   >
@@ -407,7 +435,6 @@ export function CreateReportPage() {
               <span>{errorMessage}</span>
             </div>
           )}
-
           {/* Action Buttons */}
           <div className="form-actions-row">
             <button
@@ -422,7 +449,7 @@ export function CreateReportPage() {
             <button
               type="submit"
               className="btn btn-primary btn-submit-report"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isGuestPreview}
               style={{ minWidth: '160px' }}
               data-testid="create-report-submit"
             >

@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { cloneElement } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { LoadingSpinner } from './Feedback.jsx';
 
-export function ProtectedRoute({ children, allowedRoles = [] }) {
+export function ProtectedRoute({
+  children,
+  allowedRoles = [],
+  allowGuestPreview = false,
+}) {
   const { user, isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
 
@@ -12,6 +16,9 @@ export function ProtectedRoute({ children, allowedRoles = [] }) {
   }
 
   if (!isAuthenticated) {
+    if (allowGuestPreview) {
+      return cloneElement(children, { isGuestPreview: true });
+    }
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
